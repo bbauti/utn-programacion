@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+      fieldset {
+          display: flex;
+          flex-direction: column;
+          width: fit-content;
+          > button {
+              margin-top: 1rem;
+          }
+      }
+  </style>
+</head>
+<body>
+<fieldset>
+  <legend>Crea un producto</legend>
+  <label for="productos">Producto</label>
+  <input type="text" id="productos">
+  <label for="cantidad">Cantidad</label>
+  <input type="number" id="cantidad">
+  <label for="precio">Precio</label>
+  <input type="number" id="precio">
+  <button onclick="enviar()">Enviar</button>
+  <button onclick="borrar()">Borrar</button>
+</fieldset>
+<fieldset>
+  <legend>Compra un producto</legend>
+  <label for="productos">Producto</label>
+  <input type="text" id="productos">
+  <label for="cantidad">Cantidad</label>
+  <input type="number" id="cantidad">
+  <button onclick="enviar()">Enviar</button>
+  <button onclick="borrar()">Borrar</button>
+</fieldset>
+<div id="resultado"></div>
+<script>
+  const producto = document.getElementById('productos');
+  const cantidad = document.getElementById('cantidad');
+  const precio = document.getElementById('precio');
+
+  const resDiv = document.getElementById('resultado');
+
+  const productos = []
+
+  function enviar() {
+    if (producto.value && cantidad.value && precio.value) {
+      const prod = {
+        cantidad: Number(cantidad.value),
+        precio: Number(precio.value)
+      };
+      const productExists = productos[producto.value]
+      if (productExists) {
+        console.log('Ya existe, sumandole ',prod.cantidad)
+        productExists.cantidad += prod.cantidad
+        console.log(productos[producto.value])
+        return
+      }
+      console.log(prod)
+      productos[producto.value] = prod
+    } else {
+      console.log('Faltan datos')
+    }
+  }
+
+  function borrar() {
+    if (producto.value) {
+      const productExists = productos[producto.value]
+      console.log(productExists)
+      if (productExists) {
+        console.log('Eliminando ',productExists)
+        delete productos[producto.value]
+        console.log(productos)
+        return;
+      }
+      console.log('Ese producto no existe')
+      return;
+    }
+    console.log('Faltan el nombre')
+    return;
+  }
+</script>
+</body>
+</html>
