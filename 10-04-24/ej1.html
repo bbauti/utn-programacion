@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Control de Stock</title>
+  <style>
+      fieldset {
+          display: flex;
+          flex-direction: column;
+          width: fit-content;
+      }
+      button {
+          margin-top: 1rem;
+      }
+  </style>
+</head>
+<body>
+<fieldset>
+  <legend>Crea un producto</legend>
+  <label for="producto">Producto</label>
+  <input type="text" id="producto">
+  <label for="cantidad">Cantidad</label>
+  <input type="number" id="cantidad" min="1">
+  <label for="precio">Precio</label>
+  <input type="number" id="precio" min="0.01" step="0.01">
+  <button onclick="enviar()">Enviar</button>
+  <button onclick="borrar()">Borrar</button>
+</fieldset>
+<div id="resultado"></div>
+<script>
+  const productoInput = document.getElementById('producto');
+  const cantidadInput = document.getElementById('cantidad');
+  const precioInput = document.getElementById('precio');
+  const resDiv = document.getElementById('resultado');
+
+  // Objeto para almacenar la información de los productos
+  const productos = {};
+
+  // Función para agregar o actualizar un producto
+  function enviar() {
+    const nombre = productoInput.value.trim();
+    // parseInt: Obtengo los numeros de una cadena de texto
+    const cantidad = parseInt(cantidadInput.value, 10);
+    // parseFloat: Lo mismo que parseInt pero con decimales
+    const precio = parseFloat(precioInput.value);
+
+    // Validación de los datos ingresados
+    if (nombre && cantidad > 0 && precio > 0) {
+      // Sí existe el nombre del producto dentro de los productos
+      if (productos[nombre]) {
+        productos[nombre].cantidad += cantidad;
+      } else {
+        productos[nombre] = { cantidad, precio };
+      }
+      mostrarProductos();
+    } else {
+      console.error('Datos inválidos');
+    }
+  }
+
+  // Función para borrar un producto
+  function borrar() {
+    const nombre = productoInput.value.trim();
+    // Si mando el nombre, y el nombre existe en el objeto productos
+    if (nombre && productos[nombre]) {
+      // Lo borro del objeto
+      delete productos[nombre];
+      mostrarProductos();
+    } else {
+      console.error('Producto no encontrado o nombre inválido');
+    }
+  }
+
+  // Función para mostrar los productos
+  function mostrarProductos() {
+    // Object.keys: Devuelve un array con las propiedades de un objeto
+    // map: Recorre un array y devuelve otro array con los elementos modificados
+    // join: Une los elementos de un array en un string
+    resDiv.innerHTML = Object.keys(productos).map(key =>
+      `Producto: ${key}, Stock: ${productos[key].cantidad}, Precio: ${productos[key].precio}`
+    ).join('<br>');
+  }
+</script>
+</body>
+</html>

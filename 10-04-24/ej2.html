@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Control de Stock</title>
+  <style>
+      fieldset {
+          display: flex;
+          flex-direction: column;
+          width: fit-content;
+      }
+      button {
+          margin-top: 1rem;
+      }
+      main {
+          display: flex;
+      }
+  </style>
+</head>
+<body>
+<main>
+  <section>
+    <fieldset>
+      <legend>Crea un producto</legend>
+      <label for="producto">Producto</label>
+      <input type="text" id="producto">
+      <label for="cantidad">Cantidad</label>
+      <input type="number" id="cantidad" min="1">
+      <label for="precio">Precio</label>
+      <input type="number" id="precio" min="0.01" step="0.01">
+      <button onclick="enviar()">Enviar</button>
+      <button onclick="borrar()">Borrar</button>
+    </fieldset>
+    <div id="resultado"></div>
+  </section>
+  <section>
+    <fieldset>
+      <legend>Compra un producto</legend>
+      <label for="comprarProducto">Selecciona un producto:</label>
+      <select id="comprarProducto"></select>
+      <label for="comprarCantidad">Cantidad a comprar:</label>
+      <input type="number" id="comprarCantidad" min="1">
+      <button onclick="comprar()">Comprar</button>
+    </fieldset>
+    <div id="mensajeCompra"></div>
+  </section>
+</main>
+<script>
+  const productoInput = document.getElementById('producto');
+  const cantidadInput = document.getElementById('cantidad');
+  const precioInput = document.getElementById('precio');
+  const comprarProductoSelect = document.getElementById('comprarProducto');
+  const comprarCantidadInput = document.getElementById('comprarCantidad');
+  const resDiv = document.getElementById('resultado');
+  const compraMsgDiv = document.getElementById('mensajeCompra');
+
+  // Objeto para almacenar la información de los productos
+  const productos = {};
+
+  // Función para agregar o actualizar un producto
+  function enviar() {
+    const nombre = productoInput.value.trim();
+    // parseInt: Obtengo los numeros de una cadena de texto
+    const cantidad = parseInt(cantidadInput.value, 10);
+    // parseFloat: Lo mismo que parseInt pero con decimales
+    const precio = parseFloat(precioInput.value);
+
+    // Validación de los datos ingresados
+    if (nombre && cantidad > 0 && precio > 0) {
+      // Sí existe el nombre del producto dentro de los productos
+      if (productos[nombre]) {
+        productos[nombre].cantidad += cantidad;
+      } else {
+        productos[nombre] = { cantidad, precio };
+      }
+      mostrarProductos();
+      actualizarProductosSelect();
+    } else {
+      console.error('Datos inválidos');
+    }
+  }
+
+  // Función para borrar un producto
+  function borrar() {
+    const nombre = productoInput.value.trim();
+    // Si mando el nombre, y el nombre existe en el objeto productos
+    if (nombre && productos[nombre]) {
+      // Lo borro del objeto
+      delete productos[nombre];
+      mostrarProductos();
+      actualizarProductosSelect();
+    } else {
+      console.error('Producto no encontrado o nombre inválido');
+    }
+  }
+
+  // Función para mostrar los productos
+  function mostrarProductos() {
+    // Object.keys: Devuelve un array con las propiedades de un objeto
+    // map: Recorre un array y devuelve otro array con los elementos modificados
+    // join: Une los elementos de un array en un string
+    resDiv.innerHTML = Object.keys(productos).map(key =>
+      `Producto: ${key}, Stock: ${productos[key].cantidad}, Precio: ${productos[key].precio}`
+    ).join('<br>');
+  }
+
+  // Función para actualizar el select de productos
+  function actualizarProductosSelect() {
+    comprarProductoSelect.innerHTML = Object.keys(productos).map(key =>
+      `<option value="${key}">${key}</option>`
+    ).join('');
+  }
+
+  // Función para comprar un producto
+  function comprar() {
+    // Obtengo el producto seleccionado y la cantidad a comprar
+    const producto = comprarProductoSelect.value;
+    const cantidad = parseInt(comprarCantidadInput.value, 10);
+
+    // Compruebo que el producto exista y que la cantidad sea válida
+    if (producto && cantidad > 0) {
+      // Compruebo si el producto existe y si la cantidad a comprar es menor o igual a la cantidad en stock
+      if (productos[producto] && cantidad <= productos[producto].cantidad) {
+        // Resto la cantidad comprada al stock del producto
+        productos[producto].cantidad -= cantidad;
+        const totalGastado = cantidad * productos[producto].precio;
+        // Muestro un mensaje con la cantidad comprada y el total gastado
+        compraMsgDiv.textContent = `Compraste ${cantidad} de ${producto}. Total gastado: $${totalGastado.toFixed(2)}`;
+        mostrarProductos();
+      } else {
+        compraMsgDiv.textContent = 'No hay suficiente stock o cantidad inválida.';
+      }
+    } else {
+      compraMsgDiv.textContent = 'Selecciona un producto y una cantidad válida.';
+    }
+  }
+</script>
+</body>
+</html>
