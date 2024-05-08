@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <title>Suma y resta</title>
+</head>
+<body>
+  <!-- Boton de sumar y restar -->
+  <button onclick="sumar()">+</button>
+  <div id="resultado"></div>
+  <button onclick="restar()">-</button>
+
+  <script>
+    const resDiv = document.querySelector('#resultado')
+
+    let res = 0
+
+    resDiv.innerHTML = res
+
+    const sumar = () => {
+      res++
+      resDiv.innerHTML = res
+    }
+
+    const restar = () => {
+      res--
+      resDiv.innerHTML = res
+    }
+  </script>
+</body>
+</html>

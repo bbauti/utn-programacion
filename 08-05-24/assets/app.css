@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <title>Area</title>
+</head>
+<body>
+  <!-- Calcular el area de un circulo segun su radio  -->
+  <label for="radio">Radio</label>
+  <input id="radio" type="number">
+  <button onclick="handleSubmit()">Enviar</button>
+  <div id="resultado"></div>
+
+  <script>
+    const radioInput = document.querySelector('#radio')
+    const resDiv = document.querySelector('#resultado')
+
+    const handleSubmit = () => {
+      const value = radioInput.value
+      if (!value) return resDiv.innerHTML = 'Porfavor ingresa un valor'
+      resDiv.innerHTML = `El valor del area es ${value*value*Math.PI}`
+    }
+  </script>
+</body>
+</html>

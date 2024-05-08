@@ -62,10 +62,8 @@
   // Función para agregar o actualizar un producto
   function enviar() {
     const nombre = productoInput.value.trim();
-    // parseInt: Obtengo los numeros de una cadena de texto
-    const cantidad = parseInt(cantidadInput.value, 10);
-    // parseFloat: Lo mismo que parseInt pero con decimales
-    const precio = parseFloat(precioInput.value);
+    const cantidad = +cantidadInput.value;
+    const precio = +precioInput.value;
 
     // Validación de los datos ingresados
     if (nombre && cantidad > 0 && precio > 0) {
@@ -75,11 +73,10 @@
       } else {
         productos[nombre] = { cantidad, precio };
       }
+      console.log(productos[nombre]);
       mostrarProductos();
       actualizarProductosSelect();
-    } else {
-      console.error('Datos inválidos');
-    }
+    } else console.error('Datos inválidos');
   }
 
   // Función para borrar un producto
@@ -91,9 +88,7 @@
       delete productos[nombre];
       mostrarProductos();
       actualizarProductosSelect();
-    } else {
-      console.error('Producto no encontrado o nombre inválido');
-    }
+    } else console.error('Producto no encontrado o nombre inválido');
   }
 
   // Función para mostrar los productos
@@ -129,13 +124,14 @@
         // Muestro un mensaje con la cantidad comprada y el total gastado
         compraMsgDiv.textContent = `Compraste ${cantidad} de ${producto}. Total gastado: $${totalGastado.toFixed(2)}`;
         mostrarProductos();
-      } else {
-        compraMsgDiv.textContent = 'No hay suficiente stock o cantidad inválida.';
-      }
-    } else {
-      compraMsgDiv.textContent = 'Selecciona un producto y una cantidad válida.';
-    }
+      } else compraMsgDiv.textContent = 'No hay suficiente stock o cantidad inválida.';
+    } else compraMsgDiv.textContent = 'Selecciona un producto y una cantidad válida.';
   }
 </script>
 </body>
 </html>
+
+const a = ""
+for (const producto in productos) {
+  a += "<option>${producto}</option>"
+}

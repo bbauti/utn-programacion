@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <title>Todo list</title>
+  <link rel="stylesheet" href="assets/app.css"/>
+</head>
+<body class="fondito">
+  <!-- Todo list  -->
+  <label class="ingreso" for="task">Ingresa una tarea</label>
+  <input class="boton-form" id="task" type="text">
+  <button class="boton-enviar" onclick="add()">Enviar</button>
+  <table class="tablita">
+  	<thead>
+  		<tr class="tarea-accion">
+  			<th>Tarea</th>
+  			<th>Accion</th>
+  		</tr>
+  	</thead>
+  	<tbody id="resultado" />
+  </table>
+
+  <script>
+    const taskInput = document.querySelector('#task')
+    const resDiv = document.querySelector('#resultado')
+
+    let tasks = []
+
+    const add = () => {
+      const value = taskInput.value
+      if (!value) return;
+      if (tasks.includes(value)) return alert('Ya existe una tarea con ese nombre');
+      tasks.push(value)
+      print()
+    }	
+
+    const remove = (item) => {
+    	tasks = tasks.filter(el => el !== item);
+    	print()
+    }
+
+    const print = () => {
+    	let values = ''
+    	tasks.forEach((item) => {
+    		values += `<tr><td>${item}</td><td><button class="boton-eliminar" onclick="remove('${item}')">Eliminar</button></td></tr>`
+    	})
+    	resDiv.innerHTML = values
+    }
+// resDiv.innerHTML =* `<li>${value}</li>`
+  </script>
+</body>
+</html>
